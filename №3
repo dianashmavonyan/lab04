@@ -1,0 +1,42 @@
+№3 на Python
+
+
+def seidel_method(A, B, tolerance=0.01, max_iterations=1000):
+    n = len(A)
+    x = [0] * n  # начальное приближение
+    
+    for iteration in range(max_iterations):
+        x_new = x.copy()
+        
+        for i in range(n):
+            sum1 = sum(A[i][j] * x_new[j] for j in range(i))
+            sum2 = sum(A[i][j] * x[j] for j in range(i + 1, n))
+            x_new[i] = (B[i] - sum1 - sum2) / A[i][i]
+        
+        # Проверка сходимости
+        diff = max(abs(x_new[i] - x[i]) for i in range(n))
+        if diff < tolerance:
+            return x_new
+        
+        x = x_new
+    
+    return x
+
+# Матрица коэффициентов (A)
+A = [
+    [19, -4, -9, -1],
+    [-2, 20, -2, -7],
+    [6, -5, -25, 9],
+    [0, -3, -9, 12]
+]
+
+# Вектор правых частей (B)
+B = [100, -5, 34, 69]
+
+# Решение системы методом Зейделя
+solution = seidel_method(A, B, tolerance=0.01)
+
+# Вывод решения
+print("Решение системы методом Зейделя с точностью до 0.01:")
+for i, x in enumerate(solution, start=1):
+    print(f"x{i} = {x:.4f}")
